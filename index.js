@@ -52,6 +52,30 @@ app.post("/sign-up", async (req, res) => {
   }
 });
 
+// get user info from database to access user account
+app.post("/login", async (req, res) => {
+  try {
+    const existingUser = await user.findOne({ email: req.body.email }).exec();
+
+    if (existingUser) {
+      const isValidPassword = await bcrypt.compare(
+        req.body.password,
+        existingUser.password
+      );
+
+      if (isValidPassword) {
+        res.json({ isLoginSuccess: true });
+      } else {
+        res.json({ isLoginSuccess: false });
+      }
+    } else {
+      res.json({ isLoginSuccess: false });
+    }
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 app.get("/", (req, res) => {
   res.send("GET BY CLICK!");
 });
