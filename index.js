@@ -12,6 +12,11 @@ const trendingCollections = new mongoose.model(
   "trending-collection",
   trendingCollectionSchema
 );
+const allCollectionSchema = require("./schemas/allCollectionSchema");
+const allCollections = new mongoose.model(
+  "all-collection",
+  allCollectionSchema
+);
 
 // middleware
 app.use(cors());
@@ -27,6 +32,44 @@ async function main() {
 
 main().catch((err) => console.log(err));
 
+// get different type of collections from database
+app.get("/collections", async (req, res) => {
+  try {
+    const newCollections = await allCollections
+      .find({ remarks: "NEW ARRIVALS" })
+      .limit(4)
+      .select({
+        category: 0,
+        subcategory: 0,
+        remarks: 0,
+      })
+      .exec();
+
+    const popularCollections = await allCollections
+      .find({ remarks: "POPULAR" })
+      .limit(4)
+      .select({
+        category: 0,
+        subcategory: 0,
+        remarks: 0,
+      })
+      .exec();
+
+    const coolCollections = await allCollections
+      .find({ remarks: "COOL" })
+      .limit(4)
+      .select({
+        category: 0,
+        subcategory: 0,
+        remarks: 0,
+      })
+      .exec();
+    res.send({ newCollections, popularCollections, coolCollections });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 // get all trending collections from database
 app.get("/trending-collections", async (req, res) => {
   try {
@@ -38,7 +81,7 @@ app.get("/trending-collections", async (req, res) => {
       })
       .exec();
     res.send(collections);
-  } catch {
+  } catch (err) {
     res.send(err);
   }
 });
