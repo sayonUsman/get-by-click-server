@@ -30,7 +30,13 @@ main().catch((err) => console.log(err));
 // get all trending collections from database
 app.get("/trending-collections", async (req, res) => {
   try {
-    const collections = await trendingCollections.find().exec();
+    const collections = await trendingCollections
+      .find()
+      .select({
+        category: 0,
+        remarks: 0,
+      })
+      .exec();
     res.send(collections);
   } catch {
     res.send(err);
