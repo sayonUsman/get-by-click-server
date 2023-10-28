@@ -7,6 +7,11 @@ require("dotenv").config();
 const userSchema = require("./schemas/userSchema");
 const user = new mongoose.model("user", userSchema);
 const bcrypt = require("bcrypt");
+const trendingCollectionSchema = require("./schemas/trendingCollectionSchema");
+const trendingCollections = new mongoose.model(
+  "trending-collection",
+  trendingCollectionSchema
+);
 
 // middleware
 app.use(cors());
@@ -21,6 +26,16 @@ async function main() {
 }
 
 main().catch((err) => console.log(err));
+
+// get all trending collections from database
+app.get("/trending-collections", async (req, res) => {
+  try {
+    const collections = await trendingCollections.find().exec();
+    res.send(collections);
+  } catch {
+    res.send(err);
+  }
+});
 
 // save new user info to database
 app.post("/sign-up", async (req, res) => {
