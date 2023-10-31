@@ -70,6 +70,16 @@ app.get("/collections", async (req, res) => {
   }
 });
 
+// get all collections from database
+app.get("/all-collections", async (req, res) => {
+  try {
+    const collections = await allCollections.find().exec();
+    res.send(collections);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 // get all trending collections from database
 app.get("/trending-collections", async (req, res) => {
   try {
