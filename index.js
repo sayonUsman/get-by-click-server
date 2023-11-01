@@ -86,10 +86,43 @@ app.get("/trending-collections", async (req, res) => {
     const collections = await trendingCollections
       .find()
       .select({
-        category: 0,
         remarks: 0,
       })
       .exec();
+    res.send(collections);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// get all new collections from database
+app.get("/new-collections", async (req, res) => {
+  try {
+    const collections = await allCollections
+      .find({ remarks: "NEW ARRIVALS" })
+      .exec();
+    res.send(collections);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// get all popular collections from database
+app.get("/popular-collections", async (req, res) => {
+  try {
+    const collections = await allCollections
+      .find({ remarks: "POPULAR" })
+      .exec();
+    res.send(collections);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// get all cool collections from database
+app.get("/cool-collections", async (req, res) => {
+  try {
+    const collections = await allCollections.find({ remarks: "COOL" }).exec();
     res.send(collections);
   } catch (err) {
     res.send(err);
