@@ -6,7 +6,7 @@ const trendingCollectionSchema = mongoose.Schema({
     require: true,
   },
 
-  uri: {
+  url: {
     type: String,
     require: true,
   },
