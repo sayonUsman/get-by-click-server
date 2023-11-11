@@ -37,6 +37,7 @@ app.get("/collections", async (req, res) => {
   try {
     const newCollections = await allCollections
       .find({ remarks: "NEW ARRIVALS" })
+      .sort({ _id: -1 })
       .limit(4)
       .select({
         category: 0,
@@ -47,6 +48,7 @@ app.get("/collections", async (req, res) => {
 
     const popularCollections = await allCollections
       .find({ remarks: "POPULAR" })
+      .sort({ _id: -1 })
       .limit(4)
       .select({
         category: 0,
@@ -57,6 +59,7 @@ app.get("/collections", async (req, res) => {
 
     const coolCollections = await allCollections
       .find({ remarks: "COOL" })
+      .sort({ _id: -1 })
       .limit(4)
       .select({
         category: 0,
@@ -73,7 +76,7 @@ app.get("/collections", async (req, res) => {
 // get all collections from database
 app.get("/all-collections", async (req, res) => {
   try {
-    const collections = await allCollections.find().exec();
+    const collections = await allCollections.find().sort({ _id: -1 }).exec();
     res.send(collections);
   } catch (err) {
     res.send(err);
@@ -85,6 +88,7 @@ app.get("/trending-collections", async (req, res) => {
   try {
     const collections = await trendingCollections
       .find()
+      .sort({ _id: -1 })
       .select({
         remarks: 0,
       })
@@ -100,6 +104,7 @@ app.get("/new-collections", async (req, res) => {
   try {
     const collections = await allCollections
       .find({ remarks: "NEW ARRIVALS" })
+      .sort({ _id: -1 })
       .exec();
     res.send(collections);
   } catch (err) {
@@ -112,6 +117,7 @@ app.get("/popular-collections", async (req, res) => {
   try {
     const collections = await allCollections
       .find({ remarks: "POPULAR" })
+      .sort({ _id: -1 })
       .exec();
     res.send(collections);
   } catch (err) {
@@ -122,7 +128,10 @@ app.get("/popular-collections", async (req, res) => {
 // get all cool collections from database
 app.get("/cool-collections", async (req, res) => {
   try {
-    const collections = await allCollections.find({ remarks: "COOL" }).exec();
+    const collections = await allCollections
+      .find({ remarks: "COOL" })
+      .sort({ _id: -1 })
+      .exec();
     res.send(collections);
   } catch (err) {
     res.send(err);
