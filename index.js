@@ -17,6 +17,8 @@ const allCollections = new mongoose.model(
   "all-collection",
   allCollectionSchema
 );
+const itemSchema = require("./schemas/itemSchema");
+const selectedItem = new mongoose.model("selected-item", itemSchema);
 
 // middleware
 app.use(cors());
@@ -187,6 +189,41 @@ app.post("/login", async (req, res) => {
     } else {
       res.json({ isLoginSuccess: false });
     }
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+app.post("/selected-item", async (req, res) => {
+  try {
+    const item = new selectedItem({
+      id: req.body.id,
+      title: req.body.title,
+      url: req.body.url,
+      price: req.body.price,
+      category: req.body.category,
+      subcategory: req.body.subcategory,
+    });
+
+    await item
+      .save()
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+app.delete("/delete-item/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    await selectedItem.deleteOne({ id: id }).then((reslt) => {
+      res.send(reslt);
+    });
   } catch (err) {
     res.send(err);
   }
