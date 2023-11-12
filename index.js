@@ -196,23 +196,29 @@ app.post("/login", async (req, res) => {
 
 app.post("/selected-item", async (req, res) => {
   try {
-    const item = new selectedItem({
-      id: req.body.id,
-      title: req.body.title,
-      url: req.body.url,
-      price: req.body.price,
-      category: req.body.category,
-      subcategory: req.body.subcategory,
-    });
+    const existingItem = await selectedItem.findOne({ id: req.body.id }).exec();
 
-    await item
-      .save()
-      .then((result) => {
-        res.send(result);
-      })
-      .catch((err) => {
-        res.send(err);
+    if (existingItem) {
+      res.json({ isAdded: true });
+    } else {
+      const item = new selectedItem({
+        id: req.body.id,
+        title: req.body.title,
+        url: req.body.url,
+        price: req.body.price,
+        category: req.body.category,
+        subcategory: req.body.subcategory,
       });
+
+      await item
+        .save()
+        .then((result) => {
+          res.send(result);
+        })
+        .catch((err) => {
+          res.send(err);
+        });
+    }
   } catch (err) {
     res.send(err);
   }
