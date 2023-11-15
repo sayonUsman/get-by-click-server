@@ -196,19 +196,14 @@ app.post("/login", async (req, res) => {
 
 app.post("/selected-item", async (req, res) => {
   try {
-    const existingItem = await selectedItem.findOne({ id: req.body.id }).exec();
+    const existingItem = await selectedItem
+      .findOne({ itemId: req.body.itemId })
+      .exec();
 
     if (existingItem) {
       res.json({ isAdded: true });
     } else {
-      const item = new selectedItem({
-        id: req.body.id,
-        title: req.body.title,
-        url: req.body.url,
-        price: req.body.price,
-        category: req.body.category,
-        subcategory: req.body.subcategory,
-      });
+      const item = new selectedItem(req.body);
 
       await item
         .save()
@@ -227,7 +222,7 @@ app.post("/selected-item", async (req, res) => {
 app.delete("/delete-item/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    await selectedItem.deleteOne({ id: id }).then((reslt) => {
+    await selectedItem.deleteOne({ itemId: id }).then((reslt) => {
       res.send(reslt);
     });
   } catch (err) {

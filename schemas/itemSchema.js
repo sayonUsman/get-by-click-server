@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 
 const itemSchema = mongoose.Schema({
-  id: {
+  customerEmail: {
+    type: String,
+    require: true,
+  },
+
+  itemId: {
     type: String,
     require: true,
   },
