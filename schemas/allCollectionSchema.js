@@ -16,6 +16,10 @@ const allCollectionSchema = mongoose.Schema({
     require: true,
   },
 
+  offer: {
+    type: String,
+  },
+
   category: {
     type: String,
     require: true,

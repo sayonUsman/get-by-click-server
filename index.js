@@ -101,6 +101,19 @@ app.get("/trending-collections", async (req, res) => {
   }
 });
 
+// get all offer collections from database
+app.get("/offer-collections", async (req, res) => {
+  try {
+    const collections = await allCollections
+      .find({ remarks: "OFFER" })
+      .sort({ _id: -1 })
+      .exec();
+    res.send(collections);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 // get all new collections from database
 app.get("/new-collections", async (req, res) => {
   try {
